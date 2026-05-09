@@ -33,7 +33,6 @@ geoip-url = https://geodata.kelee.one/Country-Masaiki.mmdb
 [Proxy]
 
 [Remote Proxy]
-MESL = https://em.mesl.cloud/ems/get?token=9dadb4fa62a21ddcb3d93ba2bdc69588&name=MESL,udp=true,block-quic=true,fast-open=default,vmess-aead=true,skip-cert-verify=true,enabled=true,flexible-sni=false
 
 [Proxy Chain]
 
