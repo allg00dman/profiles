@@ -1,12 +1,13 @@
 ipv6: false
+http_port: 3080
+socks_port: 3090
 allow_external_connections: false
 hide_vpn_icon: false
 hijack_dns:
 - '*'
 proxy_latency_test_url: http://cp.cloudflare.com/generate_204
 direct_latency_test_url: http://wifi.vivo.com.cn/generate_204
-include_all_networks: true
-include_apns: true
+include_all_networks: false
 vif_excluded_routes:
 - 10.0.0.0/8
 - 100.64.0.0/10
@@ -58,7 +59,13 @@ policy_groups:
     urls:
 
     block_quic: true
-    hidden: false
+    hidden: true
+- select:
+    name: Proxy
+    policies:
+    - MESL
+    flatten: true
+    filter: .*
 - select:
     name: Hong Kong
     policies:
@@ -72,6 +79,12 @@ policy_groups:
     flatten: true
     filter: (?i)(台|TW|Tai)
 - select:
+    name: Japan
+    policies:
+    - MESL
+    flatten: true
+    filter: (?i)(日本|东京|大阪|名古屋|川日|沪日|深日|泉日|埼玉|JP|Japan|Tokyo|Osaka)
+- select:
     name: Singapore
     policies:
     - MESL
@@ -83,6 +96,16 @@ policy_groups:
     - MESL
     flatten: true
     filter: (?i)(美|洛杉矶|圣何塞|圣克拉拉|西雅图|硅谷|US|United States)
+- select:
+    name: Google
+    policies:
+    - United States
+    - Singapore
+    - Japan
+    - Taiwan
+    - Hong Kong
+    flatten: false
+    hidden: false
 - select:
     name: Netflix
     policies:
@@ -130,16 +153,33 @@ policy_groups:
     - Hong Kong
     - Singapore
     - United States
+- select:
+    name: WhatsApp
+    policies:
+    - Singapore
+    - Hong Kong
+    - United States
+    - Japan
+- select:
+    name: APNs
+    policies:
+    - Hong Kong
+    - Japan
+    - Taiwan
+    - Singapore
+    - DIRECT
+    flatten: false
+    hidden: false
 rules:
 - protocol:
     match: stun
     policy: REJECT
 - domain_suffix:
     match: push.apple.com
-    policy: MESL
+    policy: APNs
 - domain_keyword:
     match: courier
-    policy: MESL
+    policy: APNs
 - rule_set:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Netflix/Netflix.list
     policy: Netflix
@@ -165,6 +205,9 @@ rules:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Telegram/Telegram.list
     policy: Telegram
 - rule_set:
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/WhatsApp/WhatsApp.list
+    policy: WhatsApp
+- rule_set:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/GitHub/GitHub.list
     policy: GitHub
 - rule_set:
@@ -179,6 +222,6 @@ rules:
 - geoip:
     match: CN
     policy: DIRECT
-    no_resolve: true
+    no_resolve: false
 - default:
-    policy: MESL
+    policy: Proxy
