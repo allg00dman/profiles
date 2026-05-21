@@ -1,56 +1,60 @@
-ipv6: false
-allow_external_connections: false
+vif_only: true
+block_quic: true
+hijack_dns:
+- '*:53'
+geoip_db_url: https://github.com/Hackl0us/GeoIP2-CN/raw/release/Country.mmdb
 proxy_latency_test_url: http://cp.cloudflare.com/generate_204
 direct_latency_test_url: http://wifi.vivo.com.cn/generate_204
-include_all_networks: true
-include_apns: true
-vif_excluded_routes:
-- 10.0.0.0/8
-- 127.0.0.0/8
-- 172.16.0.0/12
-- 192.168.0.0/16
-dns: {}
+dns:
+  bootstrap:
+  - system
+  upstreams:
+    Domestic-DNS:
+    - 223.5.5.5
+    - 119.29.29.29
+  forward:
+  - domain_wildcard:
+      match: '*'
+      value: Domestic-DNS
 bypass_tunnel_proxy:
 - localhost
 - '*.local'
 policy_groups:
 - external:
-    name: MESL
+    name: Proxy
     type: select
     urls:
 
-    block_quic: true
-    hidden: true
-- select:
-    name: Proxy
-    policies:
-    - MESL
-    flatten: true
     filter: .*
+    hidden: false
 - select:
     name: Hong Kong
     policies:
-    - MESL
+    - Proxy
     flatten: true
     filter: (?i)(港|HK|Hong)
+    hidden: false
 - select:
     name: Taiwan
     policies:
-    - MESL
+    - Proxy
     flatten: true
     filter: (?i)(台|TW|Tai)
+    hidden: false
 - select:
     name: Singapore
     policies:
-    - MESL
+    - Proxy
     flatten: true
     filter: (?i)(新加坡|坡|狮城|SG|Singapore)
+    hidden: false
 - select:
     name: United States
     policies:
-    - MESL
+    - Proxy
     flatten: true
     filter: (?i)(美|洛杉矶|圣何塞|圣克拉拉|西雅图|硅谷|US|United States)
+    hidden: false
 - select:
     name: Netflix
     policies:
@@ -97,28 +101,22 @@ rules:
 - rule_set:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list
     policy: United States
-    disabled: false
 - rule_set:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list
     policy: United States
-    disabled: false
 - rule_set:
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Google/Google.list
     policy: Taiwan
-    disabled: false
 - rule_set:
     name: Apple
-    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Surge/Apple/Apple_All.list
+    match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Apple/Apple_All.list
     policy: DIRECT
-    disabled: false
 - rule_set:
     name: LAN
     match: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Lan/Lan.list
     policy: DIRECT
-    disabled: false
 - geoip:
     match: CN
     policy: DIRECT
-    no_resolve: false
 - default:
     policy: Proxy
