@@ -1,14 +1,14 @@
 # Apple Intelligence, Siri & Search
 # Ref: https://support.apple.com/en-us/101555
 
-HOST-SUFFIX,guzzoni.apple.com
-HOST-SUFFIX,smoot.apple.com
+HOST-SUFFIX,guzzoni.apple.com,Apple Intelligence
+HOST-SUFFIX,smoot.apple.com,Apple Intelligence
 
-HOST-SUFFIX,apple-relay.apple.com
-HOST-SUFFIX,apple-relay.fastly-edge.com
-HOST-SUFFIX,apple-relay.cloudflare.com
-HOST-SUFFIX,cp4.cloudflare.com
+HOST-SUFFIX,apple-relay.apple.com,Apple Intelligence
+HOST-SUFFIX,apple-relay.fastly-edge.com,Apple Intelligence
+HOST-SUFFIX,apple-relay.cloudflare.com,Apple Intelligence
+HOST-SUFFIX,cp4.cloudflare.com,Apple Intelligence
 
-HOST-SUFFIX,apple-relay.akamaized.net
-HOST-SUFFIX,apple-relay.mask.apple-dns.net
-HOST-SUFFIX,gspe1-ssl.ls.apple.com
+HOST-SUFFIX,apple-relay.akamaized.net,Apple Intelligence
+HOST-SUFFIX,apple-relay.mask.apple-dns.net,Apple Intelligence
+HOST-SUFFIX,gspe1-ssl.ls.apple.com,Apple Intelligence
